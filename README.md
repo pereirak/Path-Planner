@@ -113,25 +113,25 @@ The Code can be divided into 3 main modules:
 
 Sensor fusion is used to detect the vehicle's position and state as well as the state of other cars on the road. We use the sensor date to determine the following infomation about the state:
 
-*Detect if there are any vehicles in front of the car
-*Detect if there are any vehicles beside the car 
+* Detect if there are any vehicles in front of the car
+* Detect if there are any vehicles beside the car 
 
 2. State transition
 
 Based on the state information, the vehicle can decide whether to stay in the lane and change speed or change lanes. 
 
 * If there is a vehicle in front then we need to decide the following options:
-** Is it safe to change into the left lane given the state information
-** Is it safe to change into the right lane given the state information
-** If we can't change lanes then slow down to avoid collision
+  * Is it safe to change into the left lane given the state information
+  * Is it safe to change into the right lane given the state information
+  * If we can't change lanes then slow down to avoid collision
 
 * If there are no vehicles in front then we check if we can speed up
 
-* If we are not in the center lane then move to the center lane if it safe to do so
+* If we are not in the center lane then move to the center lane, if it safe to do so
 
 3. Path planning
 
 Points are calculated to achieve the state transtion that ensures the vehicle's path is smooth, continuos and does not exceed maximum jerk or acceleration thresholds.
 We use a spline because it can be used to generate a path that is continuous and smooth.
 
-First, the last two points of the previous trajectory are used with three way points 30m apart create the spline. For mathematical convenience, the points were transformed into the local coordinates of the car and then transformed back. The points along the spline are calculated based on how many points that are needed and the reference velocity of the vehicle. 
+First, the last two points of the previous trajectory are used with three way points 30m apart create the spline. For mathematical convenience, the points were transformed into the local coordinates of the car and then transformed back. Then the points along the spline are calculated based on how many points that are needed and the reference velocity of the vehicle. 
