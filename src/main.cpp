@@ -304,6 +304,7 @@ double ref_vel = 0;
 #define MAX_ACCEL 0.224
 #define MAX_VELOCITY 49.5            
 
+            //Decisions making for changing lanes or speed
             if(too_close_front)
             {
               if(!too_close_right && lane <2){
@@ -312,7 +313,6 @@ double ref_vel = 0;
                 lane--; //Turn left
               }else{
                 ref_vel -= MAX_ACCEL;  //Slow down
-                state =3;
               }
 
             }else
