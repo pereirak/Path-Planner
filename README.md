@@ -105,36 +105,33 @@ Please (do your best to) stick to [Google's C++ style guide](https://google.gith
 Note: regardless of the changes you make, your project must be buildable using
 cmake and make!
 
+## Reflection
 
-## Call for IDE Profiles Pull Requests
+The Code can be divided into 3 main modules:
 
-Help your fellow students!
+1. State detection
 
-We decided to create Makefiles with cmake to keep this project as platform
-agnostic as possible. Similarly, we omitted IDE profiles in order to ensure
-that students don't feel pressured to use one IDE or another.
+Sensor fusion is used to detect the vehicle's position and state as well as the state of other cars on the road. We use the sensor date to determine the following infomation about the state:
 
-However! I'd love to help people get up and running with their IDEs of choice.
-If you've created a profile for an IDE that you think other students would
-appreciate, we'd love to have you add the requisite profile files and
-instructions to ide_profiles/. For example if you wanted to add a VS Code
-profile, you'd add:
+*Detect if there are any vehicles in front of the car
+*Detect if there are any vehicles beside the car 
 
-* /ide_profiles/vscode/.vscode
-* /ide_profiles/vscode/README.md
+2. State transition
 
-The README should explain what the profile does, how to take advantage of it,
-and how to install it.
+Based on the state information, the vehicle can decide whether to stay in the lane and change speed or change lanes. 
 
-Frankly, I've never been involved in a project with multiple IDE profiles
-before. I believe the best way to handle this would be to keep them out of the
-repo root to avoid clutter. My expectation is that most profiles will include
-instructions to copy files to a new location to get picked up by the IDE, but
-that's just a guess.
+* If there is a vehicle in front then we need to decide the following options:
+** Is it safe to change into the left lane given the state information
+** Is it safe to change into the right lane given the state information
+** If we can't change lanes then slow down to avoid collision
 
-One last note here: regardless of the IDE used, every submitted project must
-still be compilable with cmake and make./
+* If there are no vehicles in front then we check if we can speed up
 
-## How to write a README
-A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
+* If we are not in the center lane then move to the center lane if it safe to do so
 
+3. Path planning
+
+Points are calculated to achieve the state transtion that ensures the vehicle's path is smooth, continuos and does not exceed maximum jerk or acceleration thresholds.
+We use a spline because it can be used to generate a path that is continuous and smooth.
+
+First, the last two points of the previous trajectory are used with three way points 30m apart create the spline. For mathematical convenience, the points were transformed into the local coordinates of the car and then transformed back. The points along the spline are calculated based on how many points that are needed and the reference velocity of the vehicle. 
